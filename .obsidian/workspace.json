@@ -11,9 +11,11 @@
             "id": "e85638fcd2d3f4e4",
             "type": "leaf",
             "state": {
-              "type": "mk-space",
+              "type": "markdown",
               "state": {
-                "path": "docs"
+                "file": "docs/wldwlddl.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
@@ -92,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "docs/wldwlddl.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -108,6 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "docs/wldwlddl.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -129,7 +133,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "docs/wldwlddl.md"
+              }
             }
           }
         ],
@@ -155,6 +161,7 @@
   },
   "active": "e85638fcd2d3f4e4",
   "lastOpenFiles": [
+    "docs/wldwlddl.md",
     "index.md",
     "test.md",
     "README.md",

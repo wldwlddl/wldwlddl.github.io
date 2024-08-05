@@ -11,11 +11,9 @@
             "id": "e85638fcd2d3f4e4",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "mk-space",
               "state": {
-                "file": "test.md",
-                "mode": "source",
-                "source": false
+                "path": "모각코 백업"
               }
             }
           }
@@ -94,7 +92,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "test.md",
+                "file": "모각코 백업/Untitled.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +109,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "test.md",
+                "file": "모각코 백업/Untitled.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +132,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "test.md"
+                "file": "모각코 백업/Untitled.md"
               }
             }
           }
@@ -154,13 +152,58 @@
       "daily-notes:오늘의 데일리 노트 열기": false,
       "templates:템플릿 삽입": false,
       "command-palette:명령어 팔레트 열기": false,
-      "webpage-html-export:Export Vault to HTML": false,
       "obsidian-kanban:새 보드 만들기": false,
-      "obsidian-rich-links:Rich Links": false
+      "obsidian-rich-links:Rich Links": false,
+      "webpage-html-export:Export Vault to HTML": false
     }
   },
-  "active": "e85638fcd2d3f4e4",
+  "floating": {
+    "id": "929ca0b212a61ca3",
+    "type": "floating",
+    "children": [
+      {
+        "id": "38e90fdc74705bfc",
+        "type": "window",
+        "children": [
+          {
+            "id": "9c9d7068ea04629c",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "cd41d695520de6c8",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "모각코 백업/Untitled.md",
+                    "mode": "source",
+                    "source": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 317,
+        "y": 316,
+        "width": 902,
+        "height": 500,
+        "maximize": false,
+        "zoom": 0
+      }
+    ]
+  },
+  "active": "cd41d695520de6c8",
   "lastOpenFiles": [
+    "모각코 백업/모각코 5회차 개인목표 및 공부결과.md",
+    "모각코 백업/모각코 3회차 개인 목표 및 공부 결과.md",
+    "모각코 백업/모각코 1회차 개인 목표 및 공부 결과.md",
+    "모각코 백업/모각코 2회차 개인 목표 및 공부 결과.md",
+    "모각코 백업/Untitled.md",
+    "모각코 1회차 개인 목표 및 공부 결과.md",
+    "Untitled.md",
+    "모각코 백업",
     "test.md",
     "index.md",
     "README.md",
@@ -175,7 +218,6 @@
     "docs/lib/scripts/graph-data.js",
     "docs/lib/scripts/minisearch.js",
     "docs/lib/scripts/pixi.js",
-    "docs/lib/scripts/tinycolor.js",
     "docs/lib/media/favicon.png",
     "docs/lib/media/3d6c1bdc4d87cde4de67.svg",
     "docs/lib/media/874d8b8e340f75575caa.svg",

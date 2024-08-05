@@ -40,7 +40,8 @@
   "showRibbon": true,
   "deleteFileOption": "trash",
   "expandedSpaces": [
-    "/"
+    "/",
+    "//모각코 백업"
   ],
   "expandFolderOnClick": true,
   "menuTriggerChar": "/",

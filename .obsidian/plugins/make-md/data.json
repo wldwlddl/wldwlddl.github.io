@@ -41,7 +41,8 @@
   "deleteFileOption": "trash",
   "expandedSpaces": [
     "/",
-    "//docs/docs/lib/docs/lib/media"
+    "//docs/docs/lib/docs/lib/media",
+    "//모각코"
   ],
   "expandFolderOnClick": true,
   "menuTriggerChar": "/",

@@ -11,9 +11,11 @@
             "id": "e85638fcd2d3f4e4",
             "type": "leaf",
             "state": {
-              "type": "mk-space",
+              "type": "markdown",
               "state": {
-                "path": "모각코"
+                "file": "모각코/모각코 6회차 개인 목표 및 공부결과.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
@@ -92,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "모각코/모각코 5회차 개인목표 및 공부결과.md",
+                "file": "모각코/모각코 6회차 개인 목표 및 공부결과.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -109,7 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "모각코/모각코 5회차 개인목표 및 공부결과.md",
+                "file": "모각코/모각코 6회차 개인 목표 및 공부결과.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -132,7 +134,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "모각코/모각코 5회차 개인목표 및 공부결과.md"
+                "file": "모각코/모각코 6회차 개인 목표 및 공부결과.md"
               }
             }
           }
@@ -157,85 +159,22 @@
       "webpage-html-export:Export Vault to HTML": false
     }
   },
-  "floating": {
-    "id": "929ca0b212a61ca3",
-    "type": "floating",
-    "children": [
-      {
-        "id": "38e90fdc74705bfc",
-        "type": "window",
-        "children": [
-          {
-            "id": "9c9d7068ea04629c",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "cd41d695520de6c8",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "모각코/모각코 4회차 개인 목표 및 공부결과.md",
-                    "mode": "source",
-                    "source": false
-                  }
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": 316,
-        "y": 316,
-        "width": 908,
-        "height": 503,
-        "maximize": false,
-        "zoom": 0
-      },
-      {
-        "id": "b29c4801d2327c6f",
-        "type": "window",
-        "children": [
-          {
-            "id": "32ae36ad4a9e108d",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "9e90241832ea0250",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "모각코/모각코 5회차 개인목표 및 공부결과.md",
-                    "mode": "source",
-                    "source": false
-                  }
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": 317,
-        "y": 316,
-        "width": 902,
-        "height": 500,
-        "maximize": false,
-        "zoom": 0
-      }
-    ]
-  },
-  "active": "9e90241832ea0250",
+  "active": "e85638fcd2d3f4e4",
   "lastOpenFiles": [
+    "docs/모각코/모각코-6회차-개인-목표-및-공부결과.html",
+    "docs/모각코/모각코-5회차-개인-목표-및-공부결과.html",
+    "모각코/모각코 5회차 개인 목표 및 공부결과.md",
+    "모각코/모각코 6회차 개인 목표 및 공부결과.md",
+    "모각코/모각코 3회차 개인 목표 및 공부 결과.md",
+    "모각코/모각코 4회차 개인 목표 및 공부결과.md",
+    "모각코/모각코 2회차 개인 목표 및 공부 결과.md",
+    "docs/lib/media/egg_.png",
+    "모각코/egg.md",
     "docs/모각코/모각코-2회차-개인-목표-및-공부-결과.html",
     "docs/모각코/모각코-1회차-개인-목표-및-공부-결과.html",
     "docs/모각코",
-    "모각코/모각코 4회차 개인 목표 및 공부결과.md",
-    "모각코/모각코 3회차 개인 목표 및 공부 결과.md",
     "모각코/모각코 1회차 개인 목표 및 공부 결과.md",
     "모각코/모르겠당.md",
-    "모각코/모각코 5회차 개인목표 및 공부결과.md",
-    "모각코/모각코 2회차 개인 목표 및 공부 결과.md",
     "모각코 1회차 개인 목표 및 공부 결과.md",
     "Untitled.md",
     "모각코",
@@ -249,8 +188,6 @@
     "docs/lib/styles/obsidian.css",
     "docs/lib/styles/main-styles.css",
     "docs/lib/styles/global-variable-styles.css",
-    "docs/lib/styles",
-    "docs/lib/scripts/graph-data.js",
     "docs/lib/media/favicon.png",
     "docs/lib/media/3d6c1bdc4d87cde4de67.svg",
     "docs/lib/media/874d8b8e340f75575caa.svg",

@@ -1,7 +1,90 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[wldwlddl.github.io]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>wldwlddl.github.io</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 16 Aug 2024 07:55:43 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 16 Aug 2024 07:55:43 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[모각코 6회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[wldwlddl.github.io]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>wldwlddl.github.io</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 16 Aug 2024 08:04:02 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 16 Aug 2024 08:04:02 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[모각코 2회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
+ <br><br>
+<br>음성 데이터 전처리 초급 과정 배우고 실습
+<br>후에 있을 머신러닝 모델 실습을 위한 전처리 공부
+<br><br>
+<br>음성 데이터 전처리
+<br>아날로그 음성 신호를 디지털 신호로 바꿔 저장한 데이터이다. 이때 생기는 개념이 샘플링인데 아날로그 음성 신호를 디지털 신호로 변환하는 과정을 말한다. 
+<br>나이퀴스트 샘플링 정리: 아날로그 신호의 주파수의 두 배 이상의 샘플링 레이트(연속적인 신호에서 얻어진 단위시간 당 샘플링 횟수) 를 사용해야 신호를 정확히 복원할 수 있음
+<br>실습 코드: 음성 데이터 로드, 시각화
+<br>librosa 라이브러리(오디오 신호 분석 도구)의 librosa.load 함수 사용, 오디오 데이터를 일관된 형식으맞추기 위해 16kHz로 변경(이를 리샘플링이라 함 리샘플링은 고주파 성분을 제거하고 새로운 샘플 생성)
+<br>import librosa  
+import matplotlib.pyplot as plt  
+import librosa.display  
+
+audio_path = r'C:\Users\김수진\Desktop\AJR - Come Hang Out (Audio).mp3'  
+y, sr = librosa.load(audio_path, sr=16000)  
+
+plt.figure(figsize=(10,4))  
+librosa.display.waveshow(y, sr=sr)  
+plt.title('waveform')  
+plt.xlabel('Time (s)')  
+plt.ylabel('Amplitude')  
+plt.show()
+
+복사<br>
+<br>노이즈 제거-소음 줄임(e.g.특정 주파수 범위만 통과시킴)
+<br>정규화-음성신호의 진폭을 일정하게 맞추는 과정
+<br>MFCC- 음성 신호의 주파수 스펙트럼을 멜 스케일(사람의 청각 인지에 기반한 주파수 스케일)로 변환 후 푸리에 변환을 적용하여 얻는 계수(시간 영역의 신호를 주파수 영역으로 변환하는 수학적 도구)
+
+<br>프레임 분할
+<br>프레임 윈도잉-각 프레임에  윈도우 함수 적용
+<br>고속 푸리에 변환-각 프레임에 고속 푸리에 변환 적용
+<br>멜 필터 뱅크 적용(주파 영역에서 멜 스케일 적용, 여러 개의 삼각형 필터로 신호를 분해하는 과정)-주파수 스펙트럼을 멜 스케일로 변환 
+<br>이산 코사인 변환(신호를 압축하는 변환 기법)-로그 멜 스펙트럼에 DCT적용
+
+
+<br>노이즈 제거, 정규화 예시
+<br>y, sr = librosa.load(audio_path, sr=16000)  
+y_filtered = librosa.effects.preemphasis(y, coef=0.97)  
+y_normalized = y_filtered / np.max(np.abs(y_filtered))  
+
+plt.figure(figsize=(10, 4))  
+librosa.display.waveshow(y_normalized, sr=sr)  
+plt.title('Filtered and Normalized Waveform')  
+plt.xlabel('Time (s)')  
+plt.ylabel('Ampliture')  
+plt.show()
+복사<br>
+<br>패딩 및 자르기
+
+<br>음성 데이터의 길이를 조절하는 작업
+
+<br>제로 패딩-짧은 신호에 대해 끝부분에 0을 추가하여 길이를 맞춘다.
+<br>자르기-긴 신호는 일정 길이로 잘라서 사용한다. 남은 부분은 무시한다.
+
+
+
+
+<br><br>어떻게 공부해야 할지 막막했으나 음성 데이터가 무엇인지부터 차근차근 알아감. 모르는 기법과 함수들이 많이 나와 어려움을 겪음. 이후 모르는 단어나 함수들은 일단 다 적어놓고 다시 찾아보는 것도 나쁘지 않을 것이라 생각함. ]]></description><link>24-하계-모각코\모각코-2회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 2회차 개인 목표 및 공부 결과.md</guid><pubDate>Fri, 16 Aug 2024 07:59:40 GMT</pubDate></item><item><title><![CDATA[모각코 3회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
+ <br><br>
+<br>아나콘다 설치 및 파이토치 설치
+<br>파이토치 기초 잡기
+<br><br><br>
+<br>다양한 패키지 관리와 환경 관리 기능을 제공하는 오픈소스 배포판이다. 이를 사용하면 가상환경을 쉽게 만들고 관리할 수 있다.  venv보다는 좀 더 큰 툴로, 다양한 언어를 지원하며 가상환경을 venv와 달리 보다 다양하게 다룰 수 있고, 기존 환경을 복제하여 다른 프로젝트에 사용할 수 있다.
+<br>아나콘다 홈페이지에 들어가서 설치할 수 있다.
+<br><br>
+<br>
+신경망 구축에 사용되는 오픈 소스 딥러닝 프레임워크. 다양한 신경망 아키텍처를 지원한다. 전체 코드를 구현할 때까지 기다리지 않고 실시간으로 코드의 일부를 실행하고 테스트 할 수 있다는 강점이 있다. 
+
+<br>
+파이토치 설치 
+
+<br>아나콘다 설치 후 IntelliJ 터미널에서  아래의 코드를 입력하면 된다
+
+
+<br>conda install pytorch torchvision torchaudio -c pytorch
+복사<br><br>
+<br>텐서
+
+<br>텐서 ; 배열이나 행렬과 매우 유사한 특수한 자료구조이다. 텐서를 사용해 모델의 입력과 출력, 모델의 매개변수들을 부호화(정보 처리 과정의 한 형태. 컴퓨터를 이용해 영상, 이미지, 소리 데이터를 생성할 때 데이터의 양을 줄이기 위해 데이터를 코드화하고 압축하는 것) ndarray와 매우 유사하며 실제로 numpy배열에서 텐서로 변환이 가능하다.
+<br>일반적인 수식으로도 텐서를 결합할 수 있지만 torch.stack이라는 텐서 결합 연산자가 있어 이를 이용할 수도 있다. 
+
+
+<br><br>pytorch에 대한 기본 개념이 없어 처음 개념이해부터 힘들어서 용어정리부터 하면서 공부해야겠다고 생각함. 실습을 어떻게 해야되나 막막하게 느껴짐. 실습은 좀 미루거나 파이토치에 대해 좀 더 알아보고 실습해야함을 깨달음.]]></description><link>24-하계-모각코\모각코-3회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 3회차 개인 목표 및 공부 결과.md</guid><pubDate>Fri, 16 Aug 2024 08:02:22 GMT</pubDate></item><item><title><![CDATA[모각코 6회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
  <br><br>
 <br>gan실습에서 정확도 높이기
-<br><br>
+<br><br><br>
 <br>모각코 팀원들과 개별적으로 진행했던 시행착오 중 가장  결과가 잘 나온 코드를 가져왔다. 다음은 코드의 주요 부분 일부를 가져온 것이다.
 <br>from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
@@ -128,7 +211,7 @@ discriminator = to_device(discriminator,device)
 <br>코드를 하나하나 자세히 뜯어보니 내가 모르는 이론이 너무 많았고 전에 찾아봤던 이론임에도 기억이 안나 공부 중 당혹스러웠다. 하지만 결과물이 가장 깔끔하게 나온 것 같아 뿌듯했다. 학습한 이미지에 삶은 달걀이나 계란 후라이 같은 달걀 말고 요리된 달걀이 많다 보니 생성된 사진도 달걀 형태인것 같아 아쉽긴 하지만 입력된 달걀의 형태와 유사한 모양이 나왔으니 만족한다. 팀원들에게 물어보니 학습을 1000번 하면 오히려 이상한 모양이 나온다고 한다. 500에서 600사이에 좋은 결과가 나온다고 하니 다른 팀원들 결과물도 봐야겠다고 생각했다.
 <br>1 사진 첨부(최적화 알고리즘 종류)<br>
 <img alt="opt_.png" src="lib\media\opt_.png"><br>
-(출처 <a rel="noopener" class="external-link" href="https://velog.io/@freesky/Optimizer" target="_blank">https://velog.io/@freesky/Optimizer</a>)]]></description><link>24-하계-모각코\모각코-6회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 6회차 개인 목표 및 공부결과.md</guid><pubDate>Fri, 16 Aug 2024 07:55:24 GMT</pubDate><enclosure url="lib\media\1st_egg_create_.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\1st_egg_create_.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[모각코 1회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
+(출처 <a rel="noopener" class="external-link" href="https://velog.io/@freesky/Optimizer" target="_blank">https://velog.io/@freesky/Optimizer</a>)]]></description><link>24-하계-모각코\모각코-6회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 6회차 개인 목표 및 공부결과.md</guid><pubDate>Fri, 16 Aug 2024 08:03:26 GMT</pubDate><enclosure url="lib\media\1st_egg_create_.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\1st_egg_create_.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[모각코 1회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
  <br><br>
 <br>데이터 전처리 필요성
 <br><br>
@@ -182,97 +265,7 @@ df['X_log'] = preprocessing.scale(np.log(df['X']+1))
 <br>#위의 scaling 적용
 df['X_scale'] = preprocessing.scale(df['X']) df['X_minmax_scale'] = preprocessing.MinMaxScaler(df['X'] df['X_boxcox'] = preprocessing.scale(boxcox(df['X']+1)[0]) df['X_robust_scale'] = preprocessing.robust_scale(df['X'])
 #데이터 'X'에만 scaling 적용
-복사<br>p.s 데이터의 열과 변수는 종종 같은 이름으로 쓰임]]></description><link>24-하계-모각코\모각코-1회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 1회차 개인 목표 및 공부 결과.md</guid><pubDate>Fri, 16 Aug 2024 07:03:58 GMT</pubDate></item><item><title><![CDATA[모각코 2회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
- <br><br>
-<br>음성 데이터 전처리 초급 과정 배우고 실습
-<br>후에 있을 머신러닝 모델 실습을 위한 전처리 공부
-<br><br>
-<br>음성 데이터 전처리
-<br>아날로그 음성 신호를 디지털 신호로 바꿔 저장한 데이터이다. 이때 생기는 개념이 샘플링인데 아날로그 음성 신호를 디지털 신호로 변환하는 과정을 말한다. 
-<br>나이퀴스트 샘플링 정리: 아날로그 신호의 주파수의 두 배 이상의 샘플링 레이트(연속적인 신호에서 얻어진 단위시간 당 샘플링 횟수) 를 사용해야 신호를 정확히 복원할 수 있음
-<br>실습 코드: 음성 데이터 로드, 시각화
-<br>librosa 라이브러리(오디오 신호 분석 도구)의 librosa.load 함수 사용, 오디오 데이터를 일관된 형식으맞추기 위해 16kHz로 변경(이를 리샘플링이라 함 리샘플링은 고주파 성분을 제거하고 새로운 샘플 생성)
-<br>import librosa  
-import matplotlib.pyplot as plt  
-import librosa.display  
-
-audio_path = r'C:\Users\김수진\Desktop\AJR - Come Hang Out (Audio).mp3'  
-y, sr = librosa.load(audio_path, sr=16000)  
-
-plt.figure(figsize=(10,4))  
-librosa.display.waveshow(y, sr=sr)  
-plt.title('waveform')  
-plt.xlabel('Time (s)')  
-plt.ylabel('Amplitude')  
-plt.show()
-
-복사<br>
-<br>노이즈 제거-소음 줄임(e.g.특정 주파수 범위만 통과시킴)
-<br>정규화-음성신호의 진폭을 일정하게 맞추는 과정
-<br>MFCC- 음성 신호의 주파수 스펙트럼을 멜 스케일(사람의 청각 인지에 기반한 주파수 스케일)로 변환 후 푸리에 변환을 적용하여 얻는 계수(시간 영역의 신호를 주파수 영역으로 변환하는 수학적 도구)
-
-<br>프레임 분할
-<br>프레임 윈도잉-각 프레임에  윈도우 함수 적용
-<br>고속 푸리에 변환-각 프레임에 고속 푸리에 변환 적용
-<br>멜 필터 뱅크 적용(주파 영역에서 멜 스케일 적용, 여러 개의 삼각형 필터로 신호를 분해하는 과정)-주파수 스펙트럼을 멜 스케일로 변환 
-<br>이산 코사인 변환(신호를 압축하는 변환 기법)-로그 멜 스펙트럼에 DCT적용
-
-
-<br>노이즈 제거, 정규화 예시
-<br>y, sr = librosa.load(audio_path, sr=16000)  
-y_filtered = librosa.effects.preemphasis(y, coef=0.97)  
-y_normalized = y_filtered / np.max(np.abs(y_filtered))  
-
-plt.figure(figsize=(10, 4))  
-librosa.display.waveshow(y_normalized, sr=sr)  
-plt.title('Filtered and Normalized Waveform')  
-plt.xlabel('Time (s)')  
-plt.ylabel('Ampliture')  
-plt.show()
-복사<br>
-<br>패딩 및 자르기
-
-<br>음성 데이터의 길이를 조절하는 작업
-
-<br>제로 패딩-짧은 신호에 대해 끝부분에 0을 추가하여 길이를 맞춘다.
-<br>자르기-긴 신호는 일정 길이로 잘라서 사용한다. 남은 부분은 무시한다.
-
-
-
-
-<br><br>어떻게 공부해야 할지 막막했으나 음성 데이터가 무엇인지부터 차근차근 알아감. 모르는 기법과 함수들이 많이 나와 어려움을 겪음. 이후 모르는 단어나 함수들은 일단 다 적어놓고 다시 찾아보는 것도 나쁘지 않을 것이라 생각함. ]]></description><link>24-하계-모각코\모각코-2회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 2회차 개인 목표 및 공부 결과.md</guid><pubDate>Fri, 16 Aug 2024 07:04:22 GMT</pubDate></item><item><title><![CDATA[모각코 3회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
- <br><br>
-<br>아나콘다 설치 및 파이토치 설치
-<br>파이토치 기초 잡기
-<br><br>
-<br>
-아나콘다란?
-
-<br>다양한 패키지 관리와 환경 관리 기능을 제공하는 오픈소스 배포판이다. 이를 사용하면 가상환경을 쉽게 만들고 관리할 수 있다.  venv보다는 좀 더 큰 툴로, 다양한 언어를 지원하며 가상환경을 venv와 달리 보다 다양하게 다룰 수 있고, 기존 환경을 복제하여 다른 프로젝트에 사용할 수 있다.
-<br>아나콘다 홈페이지에 들어가서 설치할 수 있다.
-
-
-<br>
-파이토치란?
-
-<br>신경망 구축에 사용되는 오픈 소스 딥러닝 프레임워크. 다양한 신경망 아키텍처를 지원한다. 전체 코드를 구현할 때까지 기다리지 않고 실시간으로 코드의 일부를 실행하고 테스트 할 수 있다는 강점이 있다. 
-
-
-<br>
-파이토치 설치 
-
-<br>아나콘다 설치 후 IntelliJ 터미널에서  아래의 코드를 입력하면 된다
-
-
-<br>conda install pytorch torchvision torchaudio -c pytorch
-복사<br><br>
-<br>텐서
-
-<br>텐서 ; 배열이나 행렬과 매우 유사한 특수한 자료구조이다. 텐서를 사용해 모델의 입력과 출력, 모델의 매개변수들을 부호화(정보 처리 과정의 한 형태. 컴퓨터를 이용해 영상, 이미지, 소리 데이터를 생성할 때 데이터의 양을 줄이기 위해 데이터를 코드화하고 압축하는 것) ndarray와 매우 유사하며 실제로 numpy배열에서 텐서로 변환이 가능하다.
-<br>일반적인 수식으로도 텐서를 결합할 수 있지만 torch.stack이라는 텐서 결합 연산자가 있어 이를 이용할 수도 있다. 
-
-
-<br><br>pytorch에 대한 기본 개념이 없어 처음 개념이해부터 힘들어서 용어정리부터 하면서 공부해야겠다고 생각함. 실습을 어떻게 해야되나 막막하게 느껴짐. 실습은 좀 미루거나 파이토치에 대해 좀 더 알아보고 실습해야함을 깨달음.]]></description><link>24-하계-모각코\모각코-3회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 3회차 개인 목표 및 공부 결과.md</guid><pubDate>Wed, 31 Jul 2024 07:44:04 GMT</pubDate></item><item><title><![CDATA[모각코 4회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
+복사<br>p.s 데이터의 열과 변수는 종종 같은 이름으로 쓰임]]></description><link>24-하계-모각코\모각코-1회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 1회차 개인 목표 및 공부 결과.md</guid><pubDate>Fri, 16 Aug 2024 07:03:58 GMT</pubDate></item><item><title><![CDATA[모각코 4회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
  <br><br>
 <br>파이토치 학습
 

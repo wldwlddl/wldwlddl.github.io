@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "모각코/모각코 6회차 개인 목표 및 공부결과.md",
+                "file": "24 하계 모각코/모각코 6회차 개인 목표 및 공부결과.md",
                 "mode": "source",
                 "source": false
               }
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "모각코/모각코 6회차 개인 목표 및 공부결과.md",
+                "file": "24 하계 모각코/모각코 5회차 개인 목표 및 공부결과.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "모각코/모각코 6회차 개인 목표 및 공부결과.md",
+                "file": "24 하계 모각코/모각코 5회차 개인 목표 및 공부결과.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +134,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "모각코/모각코 6회차 개인 목표 및 공부결과.md"
+                "file": "24 하계 모각코/모각코 5회차 개인 목표 및 공부결과.md"
               }
             }
           }
@@ -159,25 +159,64 @@
       "webpage-html-export:Export Vault to HTML": false
     }
   },
-  "active": "e85638fcd2d3f4e4",
+  "floating": {
+    "id": "2a62fd540322ce73",
+    "type": "floating",
+    "children": [
+      {
+        "id": "5d9efc446ace3086",
+        "type": "window",
+        "children": [
+          {
+            "id": "966e617367c86c2a",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "4f89abc4515f4136",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "24 하계 모각코/모각코 5회차 개인 목표 및 공부결과.md",
+                    "mode": "source",
+                    "source": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 317,
+        "y": 316,
+        "width": 902,
+        "height": 500,
+        "maximize": false,
+        "zoom": 0
+      }
+    ]
+  },
+  "active": "4f89abc4515f4136",
   "lastOpenFiles": [
+    "24 하계 모각코/모각코 4회차 개인 목표 및 공부결과.md",
+    "24 하계 모각코/모각코 3회차 개인 목표 및 공부 결과.md",
+    "24 하계 모각코/모각코 1회차 개인 목표 및 공부 결과.md",
+    "24 하계 모각코/모각코 6회차 개인 목표 및 공부결과.md",
+    "24 하계 모각코/모각코 5회차 개인 목표 및 공부결과.md",
+    "24 하계 모각코/모각코 2회차 개인 목표 및 공부 결과.md",
+    "docs/lib/media/1차 달걀 생성.png",
+    "docs/lib/media/egg_.png",
+    "docs/lib/media/최적화 알고리즘 종류.png",
     "docs/모각코/모각코-6회차-개인-목표-및-공부결과.html",
     "docs/모각코/모각코-5회차-개인-목표-및-공부결과.html",
-    "모각코/모각코 5회차 개인 목표 및 공부결과.md",
-    "모각코/모각코 6회차 개인 목표 및 공부결과.md",
-    "모각코/모각코 3회차 개인 목표 및 공부 결과.md",
-    "모각코/모각코 4회차 개인 목표 및 공부결과.md",
-    "모각코/모각코 2회차 개인 목표 및 공부 결과.md",
-    "docs/lib/media/egg_.png",
     "모각코/egg.md",
     "docs/모각코/모각코-2회차-개인-목표-및-공부-결과.html",
     "docs/모각코/모각코-1회차-개인-목표-및-공부-결과.html",
     "docs/모각코",
-    "모각코/모각코 1회차 개인 목표 및 공부 결과.md",
     "모각코/모르겠당.md",
     "모각코 1회차 개인 목표 및 공부 결과.md",
     "Untitled.md",
-    "모각코",
+    "24 하계 모각코",
     "test.md",
     "index.md",
     "README.md",
@@ -187,7 +226,6 @@
     "docs/lib/metadata.json",
     "docs/lib/styles/obsidian.css",
     "docs/lib/styles/main-styles.css",
-    "docs/lib/styles/global-variable-styles.css",
     "docs/lib/media/favicon.png",
     "docs/lib/media/3d6c1bdc4d87cde4de67.svg",
     "docs/lib/media/874d8b8e340f75575caa.svg",

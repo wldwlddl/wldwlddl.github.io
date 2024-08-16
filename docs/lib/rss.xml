@@ -1,4 +1,212 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[wldwlddl.github.io]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>wldwlddl.github.io</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Thu, 08 Aug 2024 08:43:15 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 08 Aug 2024 08:43:15 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[모각코 5회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[wldwlddl.github.io]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>wldwlddl.github.io</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 16 Aug 2024 07:05:25 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 16 Aug 2024 07:05:24 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[모각코 1회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
+ <br><br>
+<br>데이터 전처리 필요성
+<br><br>
+<br>
+데이터 전처리- 데이터 분석을 위해 반드시 필요한 작업. 이를 하지 않으면 정상적인 분석이 나오지 않을 수 있다. 
+
+<br>
+결측치-데이터에 값이 없는 것 혹은 관측되지 않은 것. Null이라 표현한다. 이를 포함하고 분석을 진행하면 오류가 나거나 이상한 분석 결과가 나와 제거하거나 대체해야 한다. 대체할 경우 처리 방법은 다음과 같다.
+
+<br>
+<br>평균이나 중앙치로 대체 혹은 mode값으로 대체
+<br>간단한 예측 모델로 대체
+<br>
+<br>먼저 1번의 경우 데이터가 숫자와 같은 수치형일 경우 평균 혹은 중앙치로 대체하고 범주형(수치로 측정 불가능한 자료 e.g. 성별, 지역, 혈액형 등)일 경우 모드값(가장 많이 관측되는 수)으로 대체된다.<br>
+_추가로 어떤 데이터인지, 어디서 온 데이터인지 알아두면 데이터 전처리 하는 데 유용하다.<br>
+p.s. NA와 Null의 차이점<br>
+NA: Not Available<br>
+Null: empty object<br>
+NaN: not a Number
+<br>#결측치 부분 메꾸기(viewCount의 평균값으로 바꿈)
+test['X'] = test['X'].fillna(test.X.mean())
+복사<br>
+<br>이상치- 데이터셋에서 다른 값들보다 크게 다른 값. 이 또한 분석을 진행하면 이상한 분석 결과가 나올 수 있기 때문에 이 또한 다음과 같은 처리 과정을 거친다. 
+<br>
+<br>표준점수로 변환 후 -3이하 및 +3 제거 
+<br>IQR 방식
+<br>Binning 처리
+<br>
+<br>
+1번의 방식은 평균이 0, 표준편차가 1인 분포로 변환한 뒤 값이 -3 혹은 +3이상일 때 처리된다.
+
+<br>
+2번의 방식은 데이터를 4등분 한 다음 그 중 25%와 75%지점의 값의 차이를 극단치로 처리하는 방식이다.
+
+<br>
+3번은 구간화라고도 하는데 수치형 자료를 범주형으로 바꾸는 작업이다.
+
+<br>
+데이터 분포 변환-말 그대로 데이터의 열(변수)의 분포를 함수 등을 이용해 변환. 데이터를 학습 모델에 넣을 때, 대부분의 모델들은 데이터가 특정 분포를 따를 거라고 가정한다. 따라서 보통 데이터를 Log나 Exp(e^)등의 함수를 이용해 데이터 분포를 변환하게 한다. 
+
+<br>#log함수 적용
+#데이터 'X'의 열에만 반영
+df['X_log'] = preprocessing.scale(np.log(df['X']+1)) 
+복사<br>
+<br>데이터 단위 변환- 데이터의 단위를 일정하게 맞추는 작업. 데이터의 단위가 다르면 거리를 기반으로 하는 모델을 사용했을 때 결과가 이상하게 나올 수 있으므로, 단위를 일정하게 맞추는 스케일링이라는 작업을 해야 한다. 많은 통계 분석 방법이 데이터가 종 모양의 분포를 이룬다는 정규성 가정을 기반한다고 하므로 최대한 정규분포로 변환해야 한다.
+<br>
+<br>scaling: 평균이 0, 분산이 1인 분포로 변환
+<br>minmax scaling: 특정 범위로 모든 데이터 변환
+<br>Box-Cox: 여러 k값 중 가장 작은 sse() 선택
+<br>robust_scale: 중앙값, IQR사용
+<br>#위의 scaling 적용
+df['X_scale'] = preprocessing.scale(df['X']) df['X_minmax_scale'] = preprocessing.MinMaxScaler(df['X'] df['X_boxcox'] = preprocessing.scale(boxcox(df['X']+1)[0]) df['X_robust_scale'] = preprocessing.robust_scale(df['X'])
+#데이터 'X'에만 scaling 적용
+복사<br>p.s 데이터의 열과 변수는 종종 같은 이름으로 쓰임]]></description><link>24-하계-모각코\모각코-1회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 1회차 개인 목표 및 공부 결과.md</guid><pubDate>Fri, 16 Aug 2024 07:03:58 GMT</pubDate></item><item><title><![CDATA[모각코 2회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
+ <br><br>
+<br>음성 데이터 전처리 초급 과정 배우고 실습
+<br>후에 있을 머신러닝 모델 실습을 위한 전처리 공부
+<br><br>
+<br>음성 데이터 전처리
+<br>아날로그 음성 신호를 디지털 신호로 바꿔 저장한 데이터이다. 이때 생기는 개념이 샘플링인데 아날로그 음성 신호를 디지털 신호로 변환하는 과정을 말한다. 
+<br>나이퀴스트 샘플링 정리: 아날로그 신호의 주파수의 두 배 이상의 샘플링 레이트(연속적인 신호에서 얻어진 단위시간 당 샘플링 횟수) 를 사용해야 신호를 정확히 복원할 수 있음
+<br>실습 코드: 음성 데이터 로드, 시각화
+<br>librosa 라이브러리(오디오 신호 분석 도구)의 librosa.load 함수 사용, 오디오 데이터를 일관된 형식으맞추기 위해 16kHz로 변경(이를 리샘플링이라 함 리샘플링은 고주파 성분을 제거하고 새로운 샘플 생성)
+<br>import librosa  
+import matplotlib.pyplot as plt  
+import librosa.display  
+
+audio_path = r'C:\Users\김수진\Desktop\AJR - Come Hang Out (Audio).mp3'  
+y, sr = librosa.load(audio_path, sr=16000)  
+
+plt.figure(figsize=(10,4))  
+librosa.display.waveshow(y, sr=sr)  
+plt.title('waveform')  
+plt.xlabel('Time (s)')  
+plt.ylabel('Amplitude')  
+plt.show()
+
+복사<br>
+<br>노이즈 제거-소음 줄임(e.g.특정 주파수 범위만 통과시킴)
+<br>정규화-음성신호의 진폭을 일정하게 맞추는 과정
+<br>MFCC- 음성 신호의 주파수 스펙트럼을 멜 스케일(사람의 청각 인지에 기반한 주파수 스케일)로 변환 후 푸리에 변환을 적용하여 얻는 계수(시간 영역의 신호를 주파수 영역으로 변환하는 수학적 도구)
+
+<br>프레임 분할
+<br>프레임 윈도잉-각 프레임에  윈도우 함수 적용
+<br>고속 푸리에 변환-각 프레임에 고속 푸리에 변환 적용
+<br>멜 필터 뱅크 적용(주파 영역에서 멜 스케일 적용, 여러 개의 삼각형 필터로 신호를 분해하는 과정)-주파수 스펙트럼을 멜 스케일로 변환 
+<br>이산 코사인 변환(신호를 압축하는 변환 기법)-로그 멜 스펙트럼에 DCT적용
+
+
+<br>노이즈 제거, 정규화 예시
+<br>y, sr = librosa.load(audio_path, sr=16000)  
+y_filtered = librosa.effects.preemphasis(y, coef=0.97)  
+y_normalized = y_filtered / np.max(np.abs(y_filtered))  
+
+plt.figure(figsize=(10, 4))  
+librosa.display.waveshow(y_normalized, sr=sr)  
+plt.title('Filtered and Normalized Waveform')  
+plt.xlabel('Time (s)')  
+plt.ylabel('Ampliture')  
+plt.show()
+복사<br>
+<br>패딩 및 자르기
+
+<br>음성 데이터의 길이를 조절하는 작업
+
+<br>제로 패딩-짧은 신호에 대해 끝부분에 0을 추가하여 길이를 맞춘다.
+<br>자르기-긴 신호는 일정 길이로 잘라서 사용한다. 남은 부분은 무시한다.
+
+
+
+
+<br><br>어떻게 공부해야 할지 막막했으나 음성 데이터가 무엇인지부터 차근차근 알아감. 모르는 기법과 함수들이 많이 나와 어려움을 겪음. 이후 모르는 단어나 함수들은 일단 다 적어놓고 다시 찾아보는 것도 나쁘지 않을 것이라 생각함. ]]></description><link>24-하계-모각코\모각코-2회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 2회차 개인 목표 및 공부 결과.md</guid><pubDate>Fri, 16 Aug 2024 07:04:22 GMT</pubDate></item><item><title><![CDATA[모각코 3회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
+ <br><br>
+<br>아나콘다 설치 및 파이토치 설치
+<br>파이토치 기초 잡기
+<br><br>
+<br>
+아나콘다란?
+
+<br>다양한 패키지 관리와 환경 관리 기능을 제공하는 오픈소스 배포판이다. 이를 사용하면 가상환경을 쉽게 만들고 관리할 수 있다.  venv보다는 좀 더 큰 툴로, 다양한 언어를 지원하며 가상환경을 venv와 달리 보다 다양하게 다룰 수 있고, 기존 환경을 복제하여 다른 프로젝트에 사용할 수 있다.
+<br>아나콘다 홈페이지에 들어가서 설치할 수 있다.
+
+
+<br>
+파이토치란?
+
+<br>신경망 구축에 사용되는 오픈 소스 딥러닝 프레임워크. 다양한 신경망 아키텍처를 지원한다. 전체 코드를 구현할 때까지 기다리지 않고 실시간으로 코드의 일부를 실행하고 테스트 할 수 있다는 강점이 있다. 
+
+
+<br>
+파이토치 설치 
+
+<br>아나콘다 설치 후 IntelliJ 터미널에서  아래의 코드를 입력하면 된다
+
+
+<br>conda install pytorch torchvision torchaudio -c pytorch
+복사<br><br>
+<br>텐서
+
+<br>텐서 ; 배열이나 행렬과 매우 유사한 특수한 자료구조이다. 텐서를 사용해 모델의 입력과 출력, 모델의 매개변수들을 부호화(정보 처리 과정의 한 형태. 컴퓨터를 이용해 영상, 이미지, 소리 데이터를 생성할 때 데이터의 양을 줄이기 위해 데이터를 코드화하고 압축하는 것) ndarray와 매우 유사하며 실제로 numpy배열에서 텐서로 변환이 가능하다.
+<br>일반적인 수식으로도 텐서를 결합할 수 있지만 torch.stack이라는 텐서 결합 연산자가 있어 이를 이용할 수도 있다. 
+
+
+<br><br>pytorch에 대한 기본 개념이 없어 처음 개념이해부터 힘들어서 용어정리부터 하면서 공부해야겠다고 생각함. 실습을 어떻게 해야되나 막막하게 느껴짐. 실습은 좀 미루거나 파이토치에 대해 좀 더 알아보고 실습해야함을 깨달음.]]></description><link>24-하계-모각코\모각코-3회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 3회차 개인 목표 및 공부 결과.md</guid><pubDate>Wed, 31 Jul 2024 07:44:04 GMT</pubDate></item><item><title><![CDATA[모각코 4회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
+ <br><br>
+<br>파이토치 학습
+
+<br>dataset&amp;dataloader
+<br>transform
+
+
+<br><br><br>
+<br>데이터셋 코드와 학습 코드는 분리하는 게 좋다(유지보수가 어려울 수 있기 때문)
+<br>Pytorch의 FashionMNIST와 같은 다양한 데이터셋을 제공한다. 
+<br>from torch.utils.data import Dataset  
+from torchvision.transforms import ToTensor  
+from torchvision import datasets  
+import matplotlib.pyplot as plt
+
+training_data = datasets.FashionMNIST(  
+    root="data",  
+    train=True,  
+    download=True,  
+    transform=ToTensor()  
+)
+
+test_data = datasets.FashionMNIST(  
+    root="data",  
+    train=False,  
+    download=True,  
+    transform=ToTensor()  
+)
+복사<br>
+<br>첫 번째 단락의 코드는 필요한 모듈을 임포트 하는 과정이고 두번째 단락은 FashionMNIST 데이터셋을 로딩하고 pytorch에서 사용할 수 있도록 텐서 형태로 변환하여 training_data변수에 저장하는 역할이다. 마지막 단락은 FashionMNIST데이터셋의 테스트 데이터를 로딩하고 이를 test_data변수에 저장하는 역할을 한다. 
+<br>개인적으로 실습을 진행하다 세 번째 단락의 train =True라고 적는 실수를 저질렀는데, False라고 적어야하는 이유는 Ture라 적으면 학습 데이터가 들어오게 되어 과적합이 일어날 수 있기 때문이라고 한다. 모델이 학습한 데이터를 학습한 결과를 평가할 때 사용하는 데이터인 테스트 데이터로 사용하게 되면 객관적인 평가를 할 수 없다는 문제점도 가지고 있다.<br>
+<br>아래의 코드를 통해 데이터를 시각화할 수 있다. 이 코드를 실행하면 T-shirt, Trouser 등의 10개의 패션 아이템 중 랜덤으로 9개의 패션 아이템을 뽑는 코드이다.
+<br>labels_map = {  
+    0: "T-shirt",  
+    1: "Trouser",  
+    2: "pullover",  
+    3: "Dress",  
+    4: "Coat",  
+    5: "Sandal",  
+    6: "shirt",  
+    7: "Sneaker",  
+    8: "Bag",  
+    9: "Ankle Boot",  
+}  
+figure = plt.figure(figsize=(8, 8))  
+cols, rows = 3, 3  
+for i in range(1, cols*rows + 1):  
+    sample_idx = torch.randint(len(training_data),size=(1,)).item()  
+    img, label = training_data[sample_idx]  
+    figure.add_subplot(rows, cols, i)  
+    plt.title(labels_map[label])  
+    plt.axis("off")  
+    plt.imshow(img.squeeze(), cmap="gray")  
+    plt.show()
+복사<br>
+<br>dataloader는 샘플들을 미니배치(전체 데이터를 N등분하여 각각의 학습 데이터를 배치 방식((한번에 큰 묶음으로 데이터를 입력받는것))으로 학습) 하고 매 에폭(인공신경망에서 전체 데이터셋에 대한 한번 학습을 완료한 상태)마다 데이터를 섞어 과적합을 막고 멀티프로세싱(다수의 프로세서가 다수의 작업을 함께 처리하는 것)을 사용해 검색속도를 높이려고 하는 모든 과정을 간단한 API(소프트웨어 애플리케이션이 서로 통신하여 데이터, 특징 및 기능을 교환할 수 있도록 한 일련의 규칙)로 이러한 복잡한 과정들을 추상화한 객체이다. (iterable하다)
+<br>from torch.utils.data import DataLoader
+
+train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
+test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
+복사<br><br>
+<br>이 작업은 데이터를 조작하고 학습에 적합하게 만든다.  
+<br>TorchVision 데이터셋들은 데이터를 변형할 수 있도록 두 개의 주요 매개변수인 transform과  target_transform을 제공한다. transform은 feature(특징- 예를 들어 이미지 데이터라면 크기 조정, 정규화, 텐서 등이 있음)을 변경하기 위한 매개변수로 입력 데이터를 학습에 적합한 형태로 변형한다. target_transform은 레이블(정답)을 변경하기 위한 매개변수이다. 레이블을 원-핫 인코딩(원-핫 인코딩: 범주형 데이터를 이진 벡터로 변환하는 방법 예를 들어 고양이와 개가 있다고 하면 고양이는 (1, 0), 개는 (0, 1)으로 둘 수 있다.)이나 라벨 스무딩( 라벨 스무딩: 원-핫 인코딩과 비슷한 방법이나 좀 더 자세하다. 예를 들어 원-핫 인코딩에서 고양이는 (1, 0), 개는 (0, 1)이였다면 라벨 스무딩을 이용하면 고양이는 (0.9, 0.1), 개는(0.1, 0.9)로 표현할 수 있다. ) 등의 변형을 지원한다.
+<br><br>실습에서 오류가 난 줄 모르고 그대로 진행했다가 보고 따라한 코드와 달라 비교해봤을 때 틀렸다는 걸 인지하자 궁금증이 생겼다. 왜 오류가 나지 않았지? 검색해보고 내가 이 코드를 잘못 이해하고 있었음과 train을 어떨 때 True를 써야 하는지 알게 되었다. 이 경험을 통해 여태까지 내가 실습할 때 코드를 잘 이해하지 않고 그냥 따라만 쓰지는 않았나 성찰하는 시간을 가졌다.]]></description><link>24-하계-모각코\모각코-4회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 4회차 개인 목표 및 공부결과.md</guid><pubDate>Mon, 05 Aug 2024 06:59:08 GMT</pubDate></item><item><title><![CDATA[모각코 5회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
  <br><br>
 <br>gan이 뭔지 알기
 <br>실습을 위한 코드조사
@@ -151,198 +359,135 @@ print('Training finished.')
 
 <br><br>
 <br>코드를 실행시켜보는데 정말 원하는 대로 결과가 나오지 않아 답답하고 어디를 어떻게 고쳐야 하는지 감이 잘 오지 않았다. 만들어본 생성 이미지는 꿈에 나올까 무서울 수준이고 계란 이미지를 사용했는데 어디를 봐야 계란이 나오는지 모르겠다. 절망스러웠지만 어디를 고쳐야하는지부터 알아보기로 했다.
-]]></description><link>모각코\모각코-5회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">모각코/모각코 5회차 개인 목표 및 공부결과.md</guid><pubDate>Thu, 08 Aug 2024 07:21:49 GMT</pubDate><enclosure url="lib\media\egg_.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\egg_.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[모각코 6회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
+]]></description><link>24-하계-모각코\모각코-5회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 5회차 개인 목표 및 공부결과.md</guid><pubDate>Thu, 08 Aug 2024 07:21:49 GMT</pubDate><enclosure url="lib\media\egg_.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\egg_.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[모각코 6회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
  <br><br>
-<br>
-]]></description><link>모각코\모각코-6회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">모각코/모각코 6회차 개인 목표 및 공부결과.md</guid><pubDate>Thu, 08 Aug 2024 07:22:53 GMT</pubDate></item><item><title><![CDATA[모각코 1회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
- <br>목표:  데이터 전처리 필요성<br>
-결과:<br>
-데이터 전처리- 데이터 분석을 위해 반드시 필요한 작업. 이를 하지 않으면 정상적인 분석이 나오지 않을 수 있다. <br>결측치-데이터에 값이 없는 것 혹은 관측되지 않은 것. Null이라 표현한다. 이를 포함하고 분석을 진행하면 오류가 나거나 이상한 분석 결과가 나와 제거하거나 대체해야 한다. 대체할 경우 처리 방법은 다음과 같다.<br>
-<br>평균이나 중앙치로 대체 혹은 mode값으로 대체
-<br>간단한 예측 모델로 대체
-<br>먼저 1번의 경우 데이터가 숫자와 같은 수치형일 경우 평균 혹은 중앙치로 대체하고 범주형(수치로 측정 불가능한 자료 e.g. 성별, 지역, 혈액형 등)일 경우 모드값(가장 많이 관측되는 수)으로 대체된다.<br>
-추가로 어떤 데이터인지, 어디서 온 데이터인지 알아두면 데이터 전처리 하는 데 유용하다.<br>
-p.s. NA와 Null의 차이점<br>
-NA: Not Available<br>
-Null: empty object<br>
-NaN: not a Number<br>#결측치 부분 메꾸기(viewCount의 평균값으로 바꿈)
-test['X'] = test['X'].fillna(test.X.mean())
-복사<br>이상치- 데이터셋에서 다른 값들보다 크게 다른 값. 이 또한 분석을 진행하면 이상한 분석 결과가 나올 수 있기 때문에 이 또한 다음과 같은 처리 과정을 거친다. <br>
-<br>표준점수로 변환 후 -3이하 및 +3 제거 
-<br>IQR 방식
-<br>Binning 처리
-<br>1번의 방식은 평균이 0, 표준편차가 1인 분포로 변환한 뒤 값이 -3 혹은 +3이상일 때 처리된다.<br>
-2번의 방식은 데이터를 4등분 한 다음 그 중 25%와 75%지점의 값의 차이를 극단치로 처리하는 방식이다.<br>
-3번은 구간화라고도 하는데 수치형 자료를 범주형으로 바꾸는 작업이다.<br>데이터 분포 변환-말 그대로 데이터의 열(변수)의 분포를 함수 등을 이용해 변환. 데이터를 학습 모델에 넣을 때, 대부분의 모델들은 데이터가 특정 분포를 따를 거라고 가정한다. 따라서 보통 데이터를 Log나 Exp(e^)등의 함수를 이용해 데이터 분포를 변환하게 한다. <br>#log함수 적용
-#데이터 'X'의 열에만 반영
-df['X_log'] = preprocessing.scale(np.log(df['X']+1)) 
-복사<br>데이터 단위 변환- 데이터의 단위를 일정하게 맞추는 작업. 데이터의 단위가 다르면 거리를 기반으로 하는 모델을 사용했을 때 결과가 이상하게 나올 수 있으므로, 단위를 일정하게 맞추는 스케일링이라는 작업을 해야 한다. 많은 통계 분석 방법이 데이터가 종 모양의 분포를 이룬다는 정규성 가정을 기반한다고 하므로 최대한 정규분포로 변환해야 한다.<br>
-<br>scaling: 평균이 0, 분산이 1인 분포로 변환
-<br>minmax scaling: 특정 범위로 모든 데이터 변환
-<br>Box-Cox: 여러 k값 중 가장 작은 sse() 선택
-<br>robust_scale: 중앙값, IQR사용
-<br>#위의 scaling 적용
-df['X_scale'] = preprocessing.scale(df['X']) df['X_minmax_scale'] = preprocessing.MinMaxScaler(df['X'] df['X_boxcox'] = preprocessing.scale(boxcox(df['X']+1)[0]) df['X_robust_scale'] = preprocessing.robust_scale(df['X'])
-#데이터 'X'에만 scaling 적용
-복사<br>p.s 데이터의 열과 변수는 종종 같은 이름으로 쓰임]]></description><link>모각코\모각코-1회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">모각코/모각코 1회차 개인 목표 및 공부 결과.md</guid><pubDate>Sun, 07 Jul 2024 16:04:01 GMT</pubDate></item><item><title><![CDATA[모각코 2회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
- <br><br>
-<br>음성 데이터 전처리 초급 과정 배우고 실습
-<br>후에 있을 머신러닝 모델 실습을 위한 전처리 공부
+<br>gan실습에서 정확도 높이기
 <br><br>
-<br>음성 데이터 전처리
+<br>모각코 팀원들과 개별적으로 진행했던 시행착오 중 가장  결과가 잘 나온 코드를 가져왔다. 다음은 코드의 주요 부분 일부를 가져온 것이다.
+<br>from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
 
-<br>아날로그 음성 신호를 디지털 신호로 바꿔 저장한 데이터이다. 이때 생기는 개념이 샘플링인데 아날로그 음성 신호를 디지털 신호로 변환하는 과정을 말한다. 
+transform = transforms.Compose([
+    transforms.Resize((64, 64)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+])
 
-<br>나이퀴스트 샘플링 정리: 아날로그 신호의 주파수의 두 배 이상의 샘플링 레이트(연속적인 신호에서 얻어진 단위시간 당 샘플링 횟수) 를 사용해야 신호를 정확히 복원할 수 있음
-<br>실습 코드: 음성 데이터 로드, 시각화
-<br>librosa 라이브러리(오디오 신호 분석 도구)의 librosa.load 함수 사용, 오디오 데이터를 일관된 형식으맞추기 위해 16kHz로 변경(이를 리샘플링이라 함 리샘플링은 고주파 성분을 제거하고 새로운 샘플 생성)
+dataset_dir = "/content/datasets"
+
+dataset = datasets.ImageFolder(root=dataset_dir, transform=transform)
 
 
+dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
 
-
-<br>import librosa  
-import matplotlib.pyplot as plt  
-import librosa.display  
-
-audio_path = r'C:\Users\김수진\Desktop\AJR - Come Hang Out (Audio).mp3'  
-y, sr = librosa.load(audio_path, sr=16000)  
-
-plt.figure(figsize=(10,4))  
-librosa.display.waveshow(y, sr=sr)  
-plt.title('waveform')  
-plt.xlabel('Time (s)')  
-plt.ylabel('Amplitude')  
-plt.show()
-
+for images, labels in dataloader:
+    print("이미지 크기:", images.size())
+    print("레이블:", labels)
+    break
 복사<br>
-<br>노이즈 제거-소음 줄임(e.g.특정 주파수 범위만 통과시킴)
-<br>정규화-음성신호의 진폭을 일정하게 맞추는 과정
-<br>MFCC- 음성 신호의 주파수 스펙트럼을 멜 스케일(사람의 청각 인지에 기반한 주파수 스케일)로 변환 후 푸리에 변환을 적용하여 얻는 계수(시간 영역의 신호를 주파수 영역으로 변환하는 수학적 도구)
+<br>사진의 크기를 가로 세로 64로 맞춘다.
+<br>각 사진의 RGB값의 평균값을 0.5로, 표준편차를 0.5로 설정한다.
+<br>적어둔 경로를 통해  이미지 데이터셋이 저장된 디렉터리 경로를 지정한다. (이를 이용해 파이토치의 dataset.Imagefolder(주어진 경로에 있는 이미지 파일을 읽어 들여 파이토치에서 사용할 수 있는 데이터셋 객체를 생성)를 통해 데이터셋을 로드)
+<br>이미지 파일을 읽어서 파이토치에서 사용할 수 있는 형태의 데이터셋 객체 생성
+<br>데이터셋을 32개의 샘플을 배치 단위(연산 한 번에 들어가는 데이터의 크기)로 로드하고 데이터셋을 섞어서 모델로 제공한다.이후 샘플을 확인한다. 
+<br>train_dl = DeviceDataLoader(train_dl, device)
 
-<br>프레임 분할
-<br>프레임 윈도잉-각 프레임에  윈도우 함수 적용
-<br>고속 푸리에 변환-각 프레임에 고속 푸리에 변환 적용
-<br>멜 필터 뱅크 적용(주파 영역에서 멜 스케일 적용, 여러 개의 삼각형 필터로 신호를 분해하는 과정)-주파수 스펙트럼을 멜 스케일로 변환 
-<br>이산 코사인 변환(신호를 압축하는 변환 기법)-로그 멜 스펙트럼에 DCT적용
+discriminator = nn.Sequential(
+    nn.Conv2d(3,64,kernel_size=4,stride=2,padding=1,bias=False),
+    nn.BatchNorm2d(64),
+    nn.LeakyReLU(0.2,inplace=True),
 
+    nn.Conv2d(64,128,kernel_size=4,stride=2,padding=1,bias=False),
+    nn.BatchNorm2d(128),
+    nn.LeakyReLU(0.2,inplace=True),
 
-<br>노이즈 제거, 정규화 예시
-<br>y, sr = librosa.load(audio_path, sr=16000)  
-y_filtered = librosa.effects.preemphasis(y, coef=0.97)  
-y_normalized = y_filtered / np.max(np.abs(y_filtered))  
+    nn.Conv2d(128,256,kernel_size=4,stride=2,padding=1,bias=False),
+    nn.BatchNorm2d(256),
+    nn.LeakyReLU(0.2,inplace=True),
 
-plt.figure(figsize=(10, 4))  
-librosa.display.waveshow(y_normalized, sr=sr)  
-plt.title('Filtered and Normalized Waveform')  
-plt.xlabel('Time (s)')  
-plt.ylabel('Ampliture')  
-plt.show()
+    nn.Conv2d(256,512,kernel_size=4,stride=2,padding=1,bias=False),
+    nn.BatchNorm2d(512),
+    nn.LeakyReLU(0.2,inplace=True),
+
+    nn.Conv2d(512, 1, kernel_size=4, stride=1, padding=0, bias=False),
+
+    nn.Flatten(),
+    nn.Sigmoid()
+)
+discriminator = to_device(discriminator,device)
 복사<br>
-<br>패딩 및 자르기
+<br>gan에서 판별자 네트워크를 정의하고 데이터를 GPU로 옮기는 코드이다.
+<br>
+<br>train_id는 학습 데이터를 배치 단위로 불러오는 데이터로더이다. 
+<br>discriminator = nn.Sequential부터 그 아래 코드는 gan의 판별자를 정의한다. cnn구조를 이용해 이미지를 입력받아 진짜와 가짜를 구분한다.
+<br>nn.Conv2d는 합성곱 레이어(이미지의 특징 추출)이고 nn.Batchnorm2d는 학습을 안정화하고 속도를 높이는 역할을 한다. nn.LeakyReLU은 비선형 활성화 함수로 음수 영역에 작은 기울기를 부여하여 ReLU(+/-가 반복되는 신호에서 -흐름을 차단하는 함수. 은닉층이 많이 사용됨.)의 단점을 보완한다.
+<br>nn.flatten은 다차원 텐서를 1차원으로, nn.Sigmoid는 출력값을 [0, 1]으로 제한해 확률로 해석할 수 있게 해준다.
+<br>def train_discriminator(real_images, opt_d):
+    opt_d.zero_grad()
 
-<br>음성 데이터의 길이를 조절하는 작업
+    real_preds = discriminator(real_images)
+    real_targets = torch.cuda.FloatTensor(real_images.size(0), 1).fill_(0.9)
+    real_loss = F.binary_cross_entropy(real_preds, real_targets)
+    real_score = torch.mean(real_preds).item()
 
-<br>제로 패딩-짧은 신호에 대해 끝부분에 0을 추가하여 길이를 맞춘다.
-<br>자르기-긴 신호는 일정 길이로 잘라서 사용한다. 남은 부분은 무시한다.
+    latent = torch.randn(batch_size, latent_size, 1, 1, device=device)
+    fake_images = generator(latent)
 
+    fake_targets = torch.cuda.FloatTensor(fake_images.size(0), 1).fill_(0.1)
+    fake_preds = discriminator(fake_images)
+    fake_loss = F.binary_cross_entropy(fake_preds, fake_targets)
+    fake_score = torch.mean(fake_preds).item()
 
+    loss = real_loss + fake_loss
+    loss.backward()
+    opt_d.step()
+    return loss.item(), real_score, fake_score
+복사<br>
+<br>판별자를 학습시키기 위한 함수이다.
+<br>
+<br>opt_d.zero_grad()는 판별자의 옵티마이저(opt_d - 손실함수를 사용해서 구한 오차를 이용해 미분해서 기울기를 구하고 이를 어떻게 뉴런 네트워크의 파라미터를 업데이트할지 결정하는 방법)에서 이전에 계산된 기울기를 초기화한다.
+<br>두 번째 문단의 real_preds는 판별자에 통과시켜 얻은 예측값(해당 이미지가 진짜라고 판단한 확률)이고 real_targets은 실제 이미지의 레이블이다.(답. 보통 실제 이미지는 1로 설정되지만 여기서는 0.9로 설정) real_loss은 실제 이미지를 답으로 예측한 정도를 나타내는 손실이다. 마지막으로 real_score은 판별자가 실제 이미지를 진짜로 판단한 평균 점수이다.
+<br>latent는 생성자에 입력될 잠재 벡터(데이터가 가지고 있는 잠재적인 변수. 가짜 이미지를 생성하는 데 사용)이다. fake_targets는 가짜 이미지의 레이블(따라서 일반적으로 0으로 설정. 하지만 여기서는0.1로 설정)이다. fake_preds는 가짜 이미지를 판별자에 통과시켜 얻은 예측값으로 가짜를 진짜로 판단할 확률을 나타낸다. fake_loss는 가짜를 진짜로 예측한 정도를 나타내고 fake_score은 판별자가 가짜 이미지를 진짜로 판단한 평균 점수를 말한다.
+<br>loss는 실제 이미지와 가짜 이미지에 대한 손실의 합을 나타내고 있다.(값이 낮을수록 판별자가 잘 구분한다는 뜻이다.) loss.backward()는 손실에 대한 기울기를 계산하고 아랫줄 코드에서 이를 업데이트한다. 그 후 판별자의 손실 값과 판별자가 진짜와 가짜 이미지를 얼마나 예측했는지를 나타내는 점수를 반환한다.
+<br>def fit(epochs, lr, start_idx=1):
+    torch.cuda.empty_cache()
 
+    losses_g = []
+    losses_d = []
+    real_scores = []
+    fake_scores = []
 
-<br><br>어떻게 공부해야 할지 막막했으나 음성 데이터가 무엇인지부터 차근차근 알아감. 모르는 기법과 함수들이 많이 나와 어려움을 겪음. 이후 모르는 단어나 함수들은 일단 다 적어놓고 다시 찾아보는 것도 나쁘지 않을 것이라 생각함. ]]></description><link>모각코\모각코-2회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">모각코/모각코 2회차 개인 목표 및 공부 결과.md</guid><pubDate>Wed, 31 Jul 2024 08:46:53 GMT</pubDate></item><item><title><![CDATA[모각코 3회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
- <br><br>
-<br>아나콘다 설치 및 파이토치 설치
-<br>파이토치 기초 잡기
+    opt_d = torch.optim.Adam(discriminator.parameters(), lr=lr, betas=(0.5, 0.999))
+    opt_g = torch.optim.Adam(generator.parameters(), lr=lr, betas=(0.5, 0.999))
+
+    for epoch in range(epochs):
+        for real_images, _ in train_dl:
+            loss_d, real_score, fake_score = train_discriminator(real_images, opt_d)
+            loss_g = train_generator(opt_g)
+
+        losses_g.append(loss_g)
+        losses_d.append(loss_d)
+        real_scores.append(real_score)
+        fake_scores.append(fake_score)
+
+        print("Epoch [{}/{}], loss_g: {:.4f}, loss_d: {:.4f}, real_score: {:.4f}, fake_score: {:.4f}".format(epoch+1, epochs, loss_g, loss_d, real_score, fake_score))
+
+        save_samples(epoch+start_idx, fixed_latent, show=False)
+
+    return losses_g, losses_d, real_scores, fake_scores
+복사<br>
+<br>gan의 학습루트를 구현한 코드이다.
+<br>
+<br>fit은 학습을 수행하는 함수로 epochs는 학습을 수행할 에포크 수, Ir은 학습률, start_idx는 에포크 시작 인덱스를 나타낸다. losses_g, losses_d, real_scores, fake_scores는 학습과정에서 발생하는 생성자와 판별자의 손실과 판별자가 실제와 가짜 이미지를 얼마나 잘 구분하는지를 기록하기 위한 리스트이다. opt_d와 opt_g는 판별자와 생성자의 가중치를 업데이트하기 위한 Adam(Momentum + RMSProp. 진행하던 속도관성을 주고, 최근 경로의 곡면의 변화량에 따른 적응적 학습률을 갖는 알고리즘¹) 최적화 알고리즘이다.
+<br>전체 학습 에포크를 반복하고 train_dl 데이터 로더에서 실제 이미지 배치를 가져온다. 이후 train_discriminator(real_images, opt_d)함수(판별자를 학습시키는 함수)를 이용해 실제 이미지와 생성된 가짜 이미지를 사용해 판별자의 손실을 계산하고 판별자의 가중치를 업데이트한다. 이 함수에서 반환되는 값은 판별자의 손실 값, 판별자가 실제 이미지를 진짜로 인식할 확률, 판별자가 가짜 이미지를 진짜로 인식할 확률이다. train_generator(opt_g)는 생성자를 학습시키는 함수이다. 이 함수에서 반환되는 값은 생성자의 손실 값이다.
+<br>이후 각 에포크마다 생성자와 판별자의 손실 및 판별자 점수를 리스트에 기록한다. 이후 학습이 잘 진행되고 있는지 마지막 배치의 생성자와 판별자 손실, 그리고 판별자가 실제와 가짜 이미지를 얼마나 잘 구했는지를 출력한다.
+<br>이후 학습 과정에서 기록된 생성자 손실, 판별자 손실, 판별자가 실제와 가짜 이미지를 구분한 점수를 반환한다.
+<br>
+<br>이후 이 코드를 통해 달걀 약 960여 장의 사진을 학습하고 만들어낸 이미지 결과물은 다음과 같다.<br>
+<img alt="1차 달걀 생성.png" src="lib\media\1차-달걀-생성.png">
 <br><br>
-<br>
-아나콘다란?
-
-<br>다양한 패키지 관리와 환경 관리 기능을 제공하는 오픈소스 배포판이다. 이를 사용하면 가상환경을 쉽게 만들고 관리할 수 있다.  venv보다는 좀 더 큰 툴로, 다양한 언어를 지원하며 가상환경을 venv와 달리 보다 다양하게 다룰 수 있고, 기존 환경을 복제하여 다른 프로젝트에 사용할 수 있다.
-<br>아나콘다 홈페이지에 들어가서 설치할 수 있다.
-
-
-<br>
-파이토치란?
-
-<br>신경망 구축에 사용되는 오픈 소스 딥러닝 프레임워크. 다양한 신경망 아키텍처를 지원한다. 전체 코드를 구현할 때까지 기다리지 않고 실시간으로 코드의 일부를 실행하고 테스트 할 수 있다는 강점이 있다. 
-
-
-<br>
-파이토치 설치 
-
-<br>아나콘다 설치 후 IntelliJ 터미널에서  아래의 코드를 입력하면 된다
-
-
-<br>conda install pytorch torchvision torchaudio -c pytorch
-복사<br><br>
-<br>텐서
-
-<br>텐서 ; 배열이나 행렬과 매우 유사한 특수한 자료구조이다. 텐서를 사용해 모델의 입력과 출력, 모델의 매개변수들을 부호화(정보 처리 과정의 한 형태. 컴퓨터를 이용해 영상, 이미지, 소리 데이터를 생성할 때 데이터의 양을 줄이기 위해 데이터를 코드화하고 압축하는 것) ndarray와 매우 유사하며 실제로 numpy배열에서 텐서로 변환이 가능하다.
-<br>일반적인 수식으로도 텐서를 결합할 수 있지만 torch.stack이라는 텐서 결합 연산자가 있어 이를 이용할 수도 있다. 
-
-
-<br><br>pytorch에 대한 기본 개념이 없어 처음 개념이해부터 힘들어서 용어정리부터 하면서 공부해야겠다고 생각함. 실습을 어떻게 해야되나 막막하게 느껴짐. 실습은 좀 미루거나 파이토치에 대해 좀 더 알아보고 실습해야함을 깨달음.]]></description><link>모각코\모각코-3회차-개인-목표-및-공부-결과.html</link><guid isPermaLink="false">모각코/모각코 3회차 개인 목표 및 공부 결과.md</guid><pubDate>Wed, 31 Jul 2024 07:44:04 GMT</pubDate></item><item><title><![CDATA[모각코 4회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
- <br><br>
-<br>파이토치 학습
-
-<br>dataset&amp;dataloader
-<br>transform
-
-
-<br><br><br>
-<br>데이터셋 코드와 학습 코드는 분리하는 게 좋다(유지보수가 어려울 수 있기 때문)
-<br>Pytorch의 FashionMNIST와 같은 다양한 데이터셋을 제공한다. 
-<br>from torch.utils.data import Dataset  
-from torchvision.transforms import ToTensor  
-from torchvision import datasets  
-import matplotlib.pyplot as plt
-
-training_data = datasets.FashionMNIST(  
-    root="data",  
-    train=True,  
-    download=True,  
-    transform=ToTensor()  
-)
-
-test_data = datasets.FashionMNIST(  
-    root="data",  
-    train=False,  
-    download=True,  
-    transform=ToTensor()  
-)
-복사<br>
-<br>첫 번째 단락의 코드는 필요한 모듈을 임포트 하는 과정이고 두번째 단락은 FashionMNIST 데이터셋을 로딩하고 pytorch에서 사용할 수 있도록 텐서 형태로 변환하여 training_data변수에 저장하는 역할이다. 마지막 단락은 FashionMNIST데이터셋의 테스트 데이터를 로딩하고 이를 test_data변수에 저장하는 역할을 한다. 
-<br>개인적으로 실습을 진행하다 세 번째 단락의 train =True라고 적는 실수를 저질렀는데, False라고 적어야하는 이유는 Ture라 적으면 학습 데이터가 들어오게 되어 과적합이 일어날 수 있기 때문이라고 한다. 모델이 학습한 데이터를 학습한 결과를 평가할 때 사용하는 데이터인 테스트 데이터로 사용하게 되면 객관적인 평가를 할 수 없다는 문제점도 가지고 있다.<br>
-<br>아래의 코드를 통해 데이터를 시각화할 수 있다. 이 코드를 실행하면 T-shirt, Trouser 등의 10개의 패션 아이템 중 랜덤으로 9개의 패션 아이템을 뽑는 코드이다.
-<br>labels_map = {  
-    0: "T-shirt",  
-    1: "Trouser",  
-    2: "pullover",  
-    3: "Dress",  
-    4: "Coat",  
-    5: "Sandal",  
-    6: "shirt",  
-    7: "Sneaker",  
-    8: "Bag",  
-    9: "Ankle Boot",  
-}  
-figure = plt.figure(figsize=(8, 8))  
-cols, rows = 3, 3  
-for i in range(1, cols*rows + 1):  
-    sample_idx = torch.randint(len(training_data),size=(1,)).item()  
-    img, label = training_data[sample_idx]  
-    figure.add_subplot(rows, cols, i)  
-    plt.title(labels_map[label])  
-    plt.axis("off")  
-    plt.imshow(img.squeeze(), cmap="gray")  
-    plt.show()
-복사<br>
-<br>dataloader는 샘플들을 미니배치(전체 데이터를 N등분하여 각각의 학습 데이터를 배치 방식((한번에 큰 묶음으로 데이터를 입력받는것))으로 학습) 하고 매 에폭(인공신경망에서 전체 데이터셋에 대한 한번 학습을 완료한 상태)마다 데이터를 섞어 과적합을 막고 멀티프로세싱(다수의 프로세서가 다수의 작업을 함께 처리하는 것)을 사용해 검색속도를 높이려고 하는 모든 과정을 간단한 API(소프트웨어 애플리케이션이 서로 통신하여 데이터, 특징 및 기능을 교환할 수 있도록 한 일련의 규칙)로 이러한 복잡한 과정들을 추상화한 객체이다. (iterable하다)
-<br>from torch.utils.data import DataLoader
-
-train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
-test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
-복사<br><br>
-<br>이 작업은 데이터를 조작하고 학습에 적합하게 만든다.  
-<br>TorchVision 데이터셋들은 데이터를 변형할 수 있도록 두 개의 주요 매개변수인 transform과  target_transform을 제공한다. transform은 feature(특징- 예를 들어 이미지 데이터라면 크기 조정, 정규화, 텐서 등이 있음)을 변경하기 위한 매개변수로 입력 데이터를 학습에 적합한 형태로 변형한다. target_transform은 레이블(정답)을 변경하기 위한 매개변수이다. 레이블을 원-핫 인코딩(원-핫 인코딩: 범주형 데이터를 이진 벡터로 변환하는 방법 예를 들어 고양이와 개가 있다고 하면 고양이는 (1, 0), 개는 (0, 1)으로 둘 수 있다.)이나 라벨 스무딩( 라벨 스무딩: 원-핫 인코딩과 비슷한 방법이나 좀 더 자세하다. 예를 들어 원-핫 인코딩에서 고양이는 (1, 0), 개는 (0, 1)이였다면 라벨 스무딩을 이용하면 고양이는 (0.9, 0.1), 개는(0.1, 0.9)로 표현할 수 있다. ) 등의 변형을 지원한다.
-<br><br>실습에서 오류가 난 줄 모르고 그대로 진행했다가 보고 따라한 코드와 달라 비교해봤을 때 틀렸다는 걸 인지하자 궁금증이 생겼다. 왜 오류가 나지 않았지? 검색해보고 내가 이 코드를 잘못 이해하고 있었음과 train을 어떨 때 True를 써야 하는지 알게 되었다. 이 경험을 통해 여태까지 내가 실습할 때 코드를 잘 이해하지 않고 그냥 따라만 쓰지는 않았나 성찰하는 시간을 가졌다.]]></description><link>모각코\모각코-4회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">모각코/모각코 4회차 개인 목표 및 공부결과.md</guid><pubDate>Mon, 05 Aug 2024 06:59:08 GMT</pubDate></item><item><title><![CDATA[index]]></title><description><![CDATA[ 
+<br>코드를 하나하나 자세히 뜯어보니 내가 모르는 이론이 너무 많았고 전에 찾아봤던 이론임에도 기억이 안나 공부 중 당혹스러웠다. 하지만 결과물이 가장 깔끔하게 나온 것 같아 뿌듯했다. 학습한 이미지에 삶은 달걀이나 계란 후라이 같은 달걀 말고 요리된 달걀이 많다 보니 생성된 사진도 달걀 형태인것 같아 아쉽긴 하지만 입력된 달걀의 형태와 유사한 모양이 나왔으니 만족한다. 팀원들에게 물어보니 학습을 1000번 하면 오히려 이상한 모양이 나온다고 한다. 500에서 600사이에 좋은 결과가 나온다고 하니 다른 팀원들 결과물도 봐야겠다고 생각했다.
+<br>1 사진 첨부(최적화 알고리즘 종류)<br>
+<img alt="최적화 알고리즘 종류.png" src="lib\media\최적화-알고리즘-종류.png"><br>
+(출처 <a rel="noopener" class="external-link" href="https://velog.io/@freesky/Optimizer" target="_blank">https://velog.io/@freesky/Optimizer</a>)]]></description><link>24-하계-모각코\모각코-6회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 6회차 개인 목표 및 공부결과.md</guid><pubDate>Fri, 16 Aug 2024 07:01:33 GMT</pubDate><enclosure url="lib\media\1차-달걀-생성.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\1차-달걀-생성.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[index]]></title><description><![CDATA[ 
  <br>]]></description><link>index.html</link><guid isPermaLink="false">index.md</guid><pubDate>Wed, 26 Jun 2024 13:06:53 GMT</pubDate></item></channel></rss>

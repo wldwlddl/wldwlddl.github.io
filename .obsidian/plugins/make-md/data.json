@@ -42,7 +42,10 @@
   "expandedSpaces": [
     "/",
     "//docs/docs/lib/docs/lib/media",
-    "//모각코"
+    "//모각코",
+    "//24 하계 모각코",
+    "//docs",
+    "//docs/docs/lib"
   ],
   "expandFolderOnClick": true,
   "menuTriggerChar": "/",

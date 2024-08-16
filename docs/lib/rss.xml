@@ -1,4 +1,134 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[wldwlddl.github.io]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>wldwlddl.github.io</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 16 Aug 2024 07:05:25 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 16 Aug 2024 07:05:24 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[모각코 1회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[wldwlddl.github.io]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>wldwlddl.github.io</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 16 Aug 2024 07:55:43 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 16 Aug 2024 07:55:43 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[모각코 6회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
+ <br><br>
+<br>gan실습에서 정확도 높이기
+<br><br>
+<br>모각코 팀원들과 개별적으로 진행했던 시행착오 중 가장  결과가 잘 나온 코드를 가져왔다. 다음은 코드의 주요 부분 일부를 가져온 것이다.
+<br>from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
+transform = transforms.Compose([
+    transforms.Resize((64, 64)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+])
+
+dataset_dir = "/content/datasets"
+
+dataset = datasets.ImageFolder(root=dataset_dir, transform=transform)
+
+
+dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+
+for images, labels in dataloader:
+    print("이미지 크기:", images.size())
+    print("레이블:", labels)
+    break
+복사<br>
+<br>사진의 크기를 가로 세로 64로 맞춘다.
+<br>각 사진의 RGB값의 평균값을 0.5로, 표준편차를 0.5로 설정한다.
+<br>적어둔 경로를 통해  이미지 데이터셋이 저장된 디렉터리 경로를 지정한다. (이를 이용해 파이토치의 dataset.Imagefolder(주어진 경로에 있는 이미지 파일을 읽어 들여 파이토치에서 사용할 수 있는 데이터셋 객체를 생성)를 통해 데이터셋을 로드)
+<br>이미지 파일을 읽어서 파이토치에서 사용할 수 있는 형태의 데이터셋 객체 생성
+<br>데이터셋을 32개의 샘플을 배치 단위(연산 한 번에 들어가는 데이터의 크기)로 로드하고 데이터셋을 섞어서 모델로 제공한다.이후 샘플을 확인한다. 
+<br>train_dl = DeviceDataLoader(train_dl, device)
+
+discriminator = nn.Sequential(
+    nn.Conv2d(3,64,kernel_size=4,stride=2,padding=1,bias=False),
+    nn.BatchNorm2d(64),
+    nn.LeakyReLU(0.2,inplace=True),
+
+    nn.Conv2d(64,128,kernel_size=4,stride=2,padding=1,bias=False),
+    nn.BatchNorm2d(128),
+    nn.LeakyReLU(0.2,inplace=True),
+
+    nn.Conv2d(128,256,kernel_size=4,stride=2,padding=1,bias=False),
+    nn.BatchNorm2d(256),
+    nn.LeakyReLU(0.2,inplace=True),
+
+    nn.Conv2d(256,512,kernel_size=4,stride=2,padding=1,bias=False),
+    nn.BatchNorm2d(512),
+    nn.LeakyReLU(0.2,inplace=True),
+
+    nn.Conv2d(512, 1, kernel_size=4, stride=1, padding=0, bias=False),
+
+    nn.Flatten(),
+    nn.Sigmoid()
+)
+discriminator = to_device(discriminator,device)
+복사<br>
+<br>gan에서 판별자 네트워크를 정의하고 데이터를 GPU로 옮기는 코드이다.
+<br>
+<br>train_id는 학습 데이터를 배치 단위로 불러오는 데이터로더이다. 
+<br>discriminator = nn.Sequential부터 그 아래 코드는 gan의 판별자를 정의한다. cnn구조를 이용해 이미지를 입력받아 진짜와 가짜를 구분한다.
+<br>nn.Conv2d는 합성곱 레이어(이미지의 특징 추출)이고 nn.Batchnorm2d는 학습을 안정화하고 속도를 높이는 역할을 한다. nn.LeakyReLU은 비선형 활성화 함수로 음수 영역에 작은 기울기를 부여하여 ReLU(+/-가 반복되는 신호에서 -흐름을 차단하는 함수. 은닉층이 많이 사용됨.)의 단점을 보완한다.
+<br>nn.flatten은 다차원 텐서를 1차원으로, nn.Sigmoid는 출력값을 [0, 1]으로 제한해 확률로 해석할 수 있게 해준다.
+<br>def train_discriminator(real_images, opt_d):
+    opt_d.zero_grad()
+
+    real_preds = discriminator(real_images)
+    real_targets = torch.cuda.FloatTensor(real_images.size(0), 1).fill_(0.9)
+    real_loss = F.binary_cross_entropy(real_preds, real_targets)
+    real_score = torch.mean(real_preds).item()
+
+    latent = torch.randn(batch_size, latent_size, 1, 1, device=device)
+    fake_images = generator(latent)
+
+    fake_targets = torch.cuda.FloatTensor(fake_images.size(0), 1).fill_(0.1)
+    fake_preds = discriminator(fake_images)
+    fake_loss = F.binary_cross_entropy(fake_preds, fake_targets)
+    fake_score = torch.mean(fake_preds).item()
+
+    loss = real_loss + fake_loss
+    loss.backward()
+    opt_d.step()
+    return loss.item(), real_score, fake_score
+복사<br>
+<br>판별자를 학습시키기 위한 함수이다.
+<br>
+<br>opt_d.zero_grad()는 판별자의 옵티마이저(opt_d - 손실함수를 사용해서 구한 오차를 이용해 미분해서 기울기를 구하고 이를 어떻게 뉴런 네트워크의 파라미터를 업데이트할지 결정하는 방법)에서 이전에 계산된 기울기를 초기화한다.
+<br>두 번째 문단의 real_preds는 판별자에 통과시켜 얻은 예측값(해당 이미지가 진짜라고 판단한 확률)이고 real_targets은 실제 이미지의 레이블이다.(답. 보통 실제 이미지는 1로 설정되지만 여기서는 0.9로 설정) real_loss은 실제 이미지를 답으로 예측한 정도를 나타내는 손실이다. 마지막으로 real_score은 판별자가 실제 이미지를 진짜로 판단한 평균 점수이다.
+<br>latent는 생성자에 입력될 잠재 벡터(데이터가 가지고 있는 잠재적인 변수. 가짜 이미지를 생성하는 데 사용)이다. fake_targets는 가짜 이미지의 레이블(따라서 일반적으로 0으로 설정. 하지만 여기서는0.1로 설정)이다. fake_preds는 가짜 이미지를 판별자에 통과시켜 얻은 예측값으로 가짜를 진짜로 판단할 확률을 나타낸다. fake_loss는 가짜를 진짜로 예측한 정도를 나타내고 fake_score은 판별자가 가짜 이미지를 진짜로 판단한 평균 점수를 말한다.
+<br>loss는 실제 이미지와 가짜 이미지에 대한 손실의 합을 나타내고 있다.(값이 낮을수록 판별자가 잘 구분한다는 뜻이다.) loss.backward()는 손실에 대한 기울기를 계산하고 아랫줄 코드에서 이를 업데이트한다. 그 후 판별자의 손실 값과 판별자가 진짜와 가짜 이미지를 얼마나 예측했는지를 나타내는 점수를 반환한다.
+<br>def fit(epochs, lr, start_idx=1):
+    torch.cuda.empty_cache()
+
+    losses_g = []
+    losses_d = []
+    real_scores = []
+    fake_scores = []
+
+    opt_d = torch.optim.Adam(discriminator.parameters(), lr=lr, betas=(0.5, 0.999))
+    opt_g = torch.optim.Adam(generator.parameters(), lr=lr, betas=(0.5, 0.999))
+
+    for epoch in range(epochs):
+        for real_images, _ in train_dl:
+            loss_d, real_score, fake_score = train_discriminator(real_images, opt_d)
+            loss_g = train_generator(opt_g)
+
+        losses_g.append(loss_g)
+        losses_d.append(loss_d)
+        real_scores.append(real_score)
+        fake_scores.append(fake_score)
+
+        print("Epoch [{}/{}], loss_g: {:.4f}, loss_d: {:.4f}, real_score: {:.4f}, fake_score: {:.4f}".format(epoch+1, epochs, loss_g, loss_d, real_score, fake_score))
+
+        save_samples(epoch+start_idx, fixed_latent, show=False)
+
+    return losses_g, losses_d, real_scores, fake_scores
+복사<br>
+<br>gan의 학습루트를 구현한 코드이다.
+<br>
+<br>fit은 학습을 수행하는 함수로 epochs는 학습을 수행할 에포크 수, Ir은 학습률, start_idx는 에포크 시작 인덱스를 나타낸다. losses_g, losses_d, real_scores, fake_scores는 학습과정에서 발생하는 생성자와 판별자의 손실과 판별자가 실제와 가짜 이미지를 얼마나 잘 구분하는지를 기록하기 위한 리스트이다. opt_d와 opt_g는 판별자와 생성자의 가중치를 업데이트하기 위한 Adam(Momentum + RMSProp. 진행하던 속도관성을 주고, 최근 경로의 곡면의 변화량에 따른 적응적 학습률을 갖는 알고리즘¹) 최적화 알고리즘이다.
+<br>전체 학습 에포크를 반복하고 train_dl 데이터 로더에서 실제 이미지 배치를 가져온다. 이후 train_discriminator(real_images, opt_d)함수(판별자를 학습시키는 함수)를 이용해 실제 이미지와 생성된 가짜 이미지를 사용해 판별자의 손실을 계산하고 판별자의 가중치를 업데이트한다. 이 함수에서 반환되는 값은 판별자의 손실 값, 판별자가 실제 이미지를 진짜로 인식할 확률, 판별자가 가짜 이미지를 진짜로 인식할 확률이다. train_generator(opt_g)는 생성자를 학습시키는 함수이다. 이 함수에서 반환되는 값은 생성자의 손실 값이다.
+<br>이후 각 에포크마다 생성자와 판별자의 손실 및 판별자 점수를 리스트에 기록한다. 이후 학습이 잘 진행되고 있는지 마지막 배치의 생성자와 판별자 손실, 그리고 판별자가 실제와 가짜 이미지를 얼마나 잘 구했는지를 출력한다.
+<br>이후 학습 과정에서 기록된 생성자 손실, 판별자 손실, 판별자가 실제와 가짜 이미지를 구분한 점수를 반환한다.
+<br>
+<br>이후 이 코드를 통해 달걀 약 960여 장의 사진을 학습하고 만들어낸 이미지 결과물은 다음과 같다.<br>
+<img alt="1st_egg_create_.png" src="lib\media\1st_egg_create_.png">
+<br><br>
+<br>코드를 하나하나 자세히 뜯어보니 내가 모르는 이론이 너무 많았고 전에 찾아봤던 이론임에도 기억이 안나 공부 중 당혹스러웠다. 하지만 결과물이 가장 깔끔하게 나온 것 같아 뿌듯했다. 학습한 이미지에 삶은 달걀이나 계란 후라이 같은 달걀 말고 요리된 달걀이 많다 보니 생성된 사진도 달걀 형태인것 같아 아쉽긴 하지만 입력된 달걀의 형태와 유사한 모양이 나왔으니 만족한다. 팀원들에게 물어보니 학습을 1000번 하면 오히려 이상한 모양이 나온다고 한다. 500에서 600사이에 좋은 결과가 나온다고 하니 다른 팀원들 결과물도 봐야겠다고 생각했다.
+<br>1 사진 첨부(최적화 알고리즘 종류)<br>
+<img alt="opt_.png" src="lib\media\opt_.png"><br>
+(출처 <a rel="noopener" class="external-link" href="https://velog.io/@freesky/Optimizer" target="_blank">https://velog.io/@freesky/Optimizer</a>)]]></description><link>24-하계-모각코\모각코-6회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 6회차 개인 목표 및 공부결과.md</guid><pubDate>Fri, 16 Aug 2024 07:55:24 GMT</pubDate><enclosure url="lib\media\1st_egg_create_.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\1st_egg_create_.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[모각코 1회차 개인 목표 및 공부 결과]]></title><description><![CDATA[ 
  <br><br>
 <br>데이터 전처리 필요성
 <br><br>
@@ -359,135 +489,5 @@ print('Training finished.')
 
 <br><br>
 <br>코드를 실행시켜보는데 정말 원하는 대로 결과가 나오지 않아 답답하고 어디를 어떻게 고쳐야 하는지 감이 잘 오지 않았다. 만들어본 생성 이미지는 꿈에 나올까 무서울 수준이고 계란 이미지를 사용했는데 어디를 봐야 계란이 나오는지 모르겠다. 절망스러웠지만 어디를 고쳐야하는지부터 알아보기로 했다.
-]]></description><link>24-하계-모각코\모각코-5회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 5회차 개인 목표 및 공부결과.md</guid><pubDate>Thu, 08 Aug 2024 07:21:49 GMT</pubDate><enclosure url="lib\media\egg_.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\egg_.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[모각코 6회차 개인 목표 및 공부결과]]></title><description><![CDATA[ 
- <br><br>
-<br>gan실습에서 정확도 높이기
-<br><br>
-<br>모각코 팀원들과 개별적으로 진행했던 시행착오 중 가장  결과가 잘 나온 코드를 가져왔다. 다음은 코드의 주요 부분 일부를 가져온 것이다.
-<br>from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
-
-transform = transforms.Compose([
-    transforms.Resize((64, 64)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
-])
-
-dataset_dir = "/content/datasets"
-
-dataset = datasets.ImageFolder(root=dataset_dir, transform=transform)
-
-
-dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
-
-for images, labels in dataloader:
-    print("이미지 크기:", images.size())
-    print("레이블:", labels)
-    break
-복사<br>
-<br>사진의 크기를 가로 세로 64로 맞춘다.
-<br>각 사진의 RGB값의 평균값을 0.5로, 표준편차를 0.5로 설정한다.
-<br>적어둔 경로를 통해  이미지 데이터셋이 저장된 디렉터리 경로를 지정한다. (이를 이용해 파이토치의 dataset.Imagefolder(주어진 경로에 있는 이미지 파일을 읽어 들여 파이토치에서 사용할 수 있는 데이터셋 객체를 생성)를 통해 데이터셋을 로드)
-<br>이미지 파일을 읽어서 파이토치에서 사용할 수 있는 형태의 데이터셋 객체 생성
-<br>데이터셋을 32개의 샘플을 배치 단위(연산 한 번에 들어가는 데이터의 크기)로 로드하고 데이터셋을 섞어서 모델로 제공한다.이후 샘플을 확인한다. 
-<br>train_dl = DeviceDataLoader(train_dl, device)
-
-discriminator = nn.Sequential(
-    nn.Conv2d(3,64,kernel_size=4,stride=2,padding=1,bias=False),
-    nn.BatchNorm2d(64),
-    nn.LeakyReLU(0.2,inplace=True),
-
-    nn.Conv2d(64,128,kernel_size=4,stride=2,padding=1,bias=False),
-    nn.BatchNorm2d(128),
-    nn.LeakyReLU(0.2,inplace=True),
-
-    nn.Conv2d(128,256,kernel_size=4,stride=2,padding=1,bias=False),
-    nn.BatchNorm2d(256),
-    nn.LeakyReLU(0.2,inplace=True),
-
-    nn.Conv2d(256,512,kernel_size=4,stride=2,padding=1,bias=False),
-    nn.BatchNorm2d(512),
-    nn.LeakyReLU(0.2,inplace=True),
-
-    nn.Conv2d(512, 1, kernel_size=4, stride=1, padding=0, bias=False),
-
-    nn.Flatten(),
-    nn.Sigmoid()
-)
-discriminator = to_device(discriminator,device)
-복사<br>
-<br>gan에서 판별자 네트워크를 정의하고 데이터를 GPU로 옮기는 코드이다.
-<br>
-<br>train_id는 학습 데이터를 배치 단위로 불러오는 데이터로더이다. 
-<br>discriminator = nn.Sequential부터 그 아래 코드는 gan의 판별자를 정의한다. cnn구조를 이용해 이미지를 입력받아 진짜와 가짜를 구분한다.
-<br>nn.Conv2d는 합성곱 레이어(이미지의 특징 추출)이고 nn.Batchnorm2d는 학습을 안정화하고 속도를 높이는 역할을 한다. nn.LeakyReLU은 비선형 활성화 함수로 음수 영역에 작은 기울기를 부여하여 ReLU(+/-가 반복되는 신호에서 -흐름을 차단하는 함수. 은닉층이 많이 사용됨.)의 단점을 보완한다.
-<br>nn.flatten은 다차원 텐서를 1차원으로, nn.Sigmoid는 출력값을 [0, 1]으로 제한해 확률로 해석할 수 있게 해준다.
-<br>def train_discriminator(real_images, opt_d):
-    opt_d.zero_grad()
-
-    real_preds = discriminator(real_images)
-    real_targets = torch.cuda.FloatTensor(real_images.size(0), 1).fill_(0.9)
-    real_loss = F.binary_cross_entropy(real_preds, real_targets)
-    real_score = torch.mean(real_preds).item()
-
-    latent = torch.randn(batch_size, latent_size, 1, 1, device=device)
-    fake_images = generator(latent)
-
-    fake_targets = torch.cuda.FloatTensor(fake_images.size(0), 1).fill_(0.1)
-    fake_preds = discriminator(fake_images)
-    fake_loss = F.binary_cross_entropy(fake_preds, fake_targets)
-    fake_score = torch.mean(fake_preds).item()
-
-    loss = real_loss + fake_loss
-    loss.backward()
-    opt_d.step()
-    return loss.item(), real_score, fake_score
-복사<br>
-<br>판별자를 학습시키기 위한 함수이다.
-<br>
-<br>opt_d.zero_grad()는 판별자의 옵티마이저(opt_d - 손실함수를 사용해서 구한 오차를 이용해 미분해서 기울기를 구하고 이를 어떻게 뉴런 네트워크의 파라미터를 업데이트할지 결정하는 방법)에서 이전에 계산된 기울기를 초기화한다.
-<br>두 번째 문단의 real_preds는 판별자에 통과시켜 얻은 예측값(해당 이미지가 진짜라고 판단한 확률)이고 real_targets은 실제 이미지의 레이블이다.(답. 보통 실제 이미지는 1로 설정되지만 여기서는 0.9로 설정) real_loss은 실제 이미지를 답으로 예측한 정도를 나타내는 손실이다. 마지막으로 real_score은 판별자가 실제 이미지를 진짜로 판단한 평균 점수이다.
-<br>latent는 생성자에 입력될 잠재 벡터(데이터가 가지고 있는 잠재적인 변수. 가짜 이미지를 생성하는 데 사용)이다. fake_targets는 가짜 이미지의 레이블(따라서 일반적으로 0으로 설정. 하지만 여기서는0.1로 설정)이다. fake_preds는 가짜 이미지를 판별자에 통과시켜 얻은 예측값으로 가짜를 진짜로 판단할 확률을 나타낸다. fake_loss는 가짜를 진짜로 예측한 정도를 나타내고 fake_score은 판별자가 가짜 이미지를 진짜로 판단한 평균 점수를 말한다.
-<br>loss는 실제 이미지와 가짜 이미지에 대한 손실의 합을 나타내고 있다.(값이 낮을수록 판별자가 잘 구분한다는 뜻이다.) loss.backward()는 손실에 대한 기울기를 계산하고 아랫줄 코드에서 이를 업데이트한다. 그 후 판별자의 손실 값과 판별자가 진짜와 가짜 이미지를 얼마나 예측했는지를 나타내는 점수를 반환한다.
-<br>def fit(epochs, lr, start_idx=1):
-    torch.cuda.empty_cache()
-
-    losses_g = []
-    losses_d = []
-    real_scores = []
-    fake_scores = []
-
-    opt_d = torch.optim.Adam(discriminator.parameters(), lr=lr, betas=(0.5, 0.999))
-    opt_g = torch.optim.Adam(generator.parameters(), lr=lr, betas=(0.5, 0.999))
-
-    for epoch in range(epochs):
-        for real_images, _ in train_dl:
-            loss_d, real_score, fake_score = train_discriminator(real_images, opt_d)
-            loss_g = train_generator(opt_g)
-
-        losses_g.append(loss_g)
-        losses_d.append(loss_d)
-        real_scores.append(real_score)
-        fake_scores.append(fake_score)
-
-        print("Epoch [{}/{}], loss_g: {:.4f}, loss_d: {:.4f}, real_score: {:.4f}, fake_score: {:.4f}".format(epoch+1, epochs, loss_g, loss_d, real_score, fake_score))
-
-        save_samples(epoch+start_idx, fixed_latent, show=False)
-
-    return losses_g, losses_d, real_scores, fake_scores
-복사<br>
-<br>gan의 학습루트를 구현한 코드이다.
-<br>
-<br>fit은 학습을 수행하는 함수로 epochs는 학습을 수행할 에포크 수, Ir은 학습률, start_idx는 에포크 시작 인덱스를 나타낸다. losses_g, losses_d, real_scores, fake_scores는 학습과정에서 발생하는 생성자와 판별자의 손실과 판별자가 실제와 가짜 이미지를 얼마나 잘 구분하는지를 기록하기 위한 리스트이다. opt_d와 opt_g는 판별자와 생성자의 가중치를 업데이트하기 위한 Adam(Momentum + RMSProp. 진행하던 속도관성을 주고, 최근 경로의 곡면의 변화량에 따른 적응적 학습률을 갖는 알고리즘¹) 최적화 알고리즘이다.
-<br>전체 학습 에포크를 반복하고 train_dl 데이터 로더에서 실제 이미지 배치를 가져온다. 이후 train_discriminator(real_images, opt_d)함수(판별자를 학습시키는 함수)를 이용해 실제 이미지와 생성된 가짜 이미지를 사용해 판별자의 손실을 계산하고 판별자의 가중치를 업데이트한다. 이 함수에서 반환되는 값은 판별자의 손실 값, 판별자가 실제 이미지를 진짜로 인식할 확률, 판별자가 가짜 이미지를 진짜로 인식할 확률이다. train_generator(opt_g)는 생성자를 학습시키는 함수이다. 이 함수에서 반환되는 값은 생성자의 손실 값이다.
-<br>이후 각 에포크마다 생성자와 판별자의 손실 및 판별자 점수를 리스트에 기록한다. 이후 학습이 잘 진행되고 있는지 마지막 배치의 생성자와 판별자 손실, 그리고 판별자가 실제와 가짜 이미지를 얼마나 잘 구했는지를 출력한다.
-<br>이후 학습 과정에서 기록된 생성자 손실, 판별자 손실, 판별자가 실제와 가짜 이미지를 구분한 점수를 반환한다.
-<br>
-<br>이후 이 코드를 통해 달걀 약 960여 장의 사진을 학습하고 만들어낸 이미지 결과물은 다음과 같다.<br>
-<img alt="1차 달걀 생성.png" src="lib\media\1차-달걀-생성.png">
-<br><br>
-<br>코드를 하나하나 자세히 뜯어보니 내가 모르는 이론이 너무 많았고 전에 찾아봤던 이론임에도 기억이 안나 공부 중 당혹스러웠다. 하지만 결과물이 가장 깔끔하게 나온 것 같아 뿌듯했다. 학습한 이미지에 삶은 달걀이나 계란 후라이 같은 달걀 말고 요리된 달걀이 많다 보니 생성된 사진도 달걀 형태인것 같아 아쉽긴 하지만 입력된 달걀의 형태와 유사한 모양이 나왔으니 만족한다. 팀원들에게 물어보니 학습을 1000번 하면 오히려 이상한 모양이 나온다고 한다. 500에서 600사이에 좋은 결과가 나온다고 하니 다른 팀원들 결과물도 봐야겠다고 생각했다.
-<br>1 사진 첨부(최적화 알고리즘 종류)<br>
-<img alt="최적화 알고리즘 종류.png" src="lib\media\최적화-알고리즘-종류.png"><br>
-(출처 <a rel="noopener" class="external-link" href="https://velog.io/@freesky/Optimizer" target="_blank">https://velog.io/@freesky/Optimizer</a>)]]></description><link>24-하계-모각코\모각코-6회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 6회차 개인 목표 및 공부결과.md</guid><pubDate>Fri, 16 Aug 2024 07:01:33 GMT</pubDate><enclosure url="lib\media\1차-달걀-생성.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\1차-달걀-생성.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[index]]></title><description><![CDATA[ 
+]]></description><link>24-하계-모각코\모각코-5회차-개인-목표-및-공부결과.html</link><guid isPermaLink="false">24 하계 모각코/모각코 5회차 개인 목표 및 공부결과.md</guid><pubDate>Thu, 08 Aug 2024 07:21:49 GMT</pubDate><enclosure url="lib\media\egg_.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\egg_.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[index]]></title><description><![CDATA[ 
  <br>]]></description><link>index.html</link><guid isPermaLink="false">index.md</guid><pubDate>Wed, 26 Jun 2024 13:06:53 GMT</pubDate></item></channel></rss>
